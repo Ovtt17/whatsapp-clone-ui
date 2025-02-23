@@ -1,9 +1,11 @@
-function App() {
+import {BrowserRouter} from "react-router-dom";
+import AppRoutes from "./routes/AppRoutes.tsx";
 
+function App() {
   return (
-    <>
-      Hello World
-    </>
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
   )
 }
 
