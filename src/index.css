@@ -1,1 +1,15 @@
 @import "tailwindcss";
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #ccc;
+}
+
+.gray-bg {
+    background-color: #f0f2f5;
+}
