@@ -1,7 +1,7 @@
 export type ChatResponse = {
   id: string;
   name: string;
-  unreadCount: number;
+  unreadCount?: number;
   lastMessage?: string;
   lastMessageTime: Date;
   isRecipientOnline: boolean;
