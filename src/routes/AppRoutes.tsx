@@ -1,8 +1,8 @@
-import {Route, Routes} from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import Home from "../pages/Home/Home.tsx";
-import {useKeycloak} from "../modules/auth/keycloak/KeycloakContext.tsx";
-import {useEffect} from "react";
-import {setupAxiosInterceptors} from "../modules/auth/axios/axiosInstance.ts";
+import { useKeycloak } from "../modules/auth/keycloak/KeycloakContext.tsx";
+import { useEffect } from "react";
+import { setupAxiosInterceptors } from "../modules/auth/axios/axiosInstance.ts";
 
 const AppRoutes = () => {
   const { keycloakService, isAuthenticated } = useKeycloak();
@@ -13,9 +13,6 @@ const AppRoutes = () => {
     }
   }, [isAuthenticated, keycloakService]);
 
-  if (!isAuthenticated) {
-    return <div>Loading...</div>;
-  }
   return (
     <Routes>
       <Route path="" element={<Home />} />
