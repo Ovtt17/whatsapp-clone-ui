@@ -23,3 +23,9 @@ body {
         object-fit: cover;
     }
 }
+
+.bg-chat {
+    background-color: #efeae2;
+    background-image: url("/wa_bg.png");
+    background-size: contain;
+}
