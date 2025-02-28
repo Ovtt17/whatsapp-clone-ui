@@ -1,15 +1,25 @@
+import KeycloakService from '@/modules/auth/keycloak/KeycloakService';
 import { FC } from 'react';
-import { ArrowLeftEndOnRectangleIcon, ChatBubbleBottomCenterIcon, UserCircleIcon } from "@heroicons/react/24/solid";
+import { FaDoorOpen, FaUser } from 'react-icons/fa';
+import { FaMessage } from 'react-icons/fa6';
 
 const ChatSidebarOptions: FC = () => {
+  const userProfile = () => {
+    KeycloakService.accountManagement();
+  }
+
+  const logout = () => {
+    KeycloakService.logout();
+  }
+
   return (
     <>
       <div>
-        <ChatBubbleBottomCenterIcon className="h-5 w-5 cursor-pointer" />
+        <FaMessage className="h-5 w-5 cursor-pointer" />
       </div>
       <div className="flex flex-col items-center gap-2">
-        <UserCircleIcon className="h-5 w-5 cursor-pointer" />
-        <ArrowLeftEndOnRectangleIcon className="h-5 w-5 cursor-pointer" />
+        <FaUser className="h-5 w-5 cursor-pointer" onClick={userProfile} />
+        <FaDoorOpen className="h-5 w-5 cursor-pointer" onClick={logout} />
       </div>
     </>
   );
