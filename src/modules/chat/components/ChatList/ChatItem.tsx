@@ -36,7 +36,7 @@ const ChatItem: FC<ChatItemProps> = ({ chat, onClick }) => {
         <time className={`text-md ${chat.unreadCount && chat.unreadCount > 0 ? 'text-[#1fa855] font-medium' : 'text-gray-500'}`} dateTime={dayjs(chat.lastMessageTime).format()}>
           {dayjs(chat.lastMessageTime).format('DD/MM/YY')}
         </time>
-        {chat.unreadCount && chat.unreadCount > 0 && (
+        {(chat.unreadCount ?? 0) > 0 && (
           <span className='flex justify-center items-center bg-[#1fa855] text-white min-w-5 h-5 rounded-full px-1 text-sm font-normal'>
             {chat.unreadCount}
           </span>
