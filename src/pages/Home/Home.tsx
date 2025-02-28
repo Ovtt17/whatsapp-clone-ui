@@ -1,4 +1,4 @@
-import ChatContent from '@/modules/chat/components/ChatContent/ChatContent';
+import ChatContent from '@/modules/chat/components/ChatContent';
 import ChatList from '@/modules/chat/components/ChatList';
 import { FC } from 'react';
 
