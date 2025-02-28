@@ -2,7 +2,7 @@ export type ChatResponse = {
   id: string;
   name: string;
   unreadCount: number;
-  lastMessage: string;
+  lastMessage?: string;
   lastMessageTime: Date;
   isRecipientOnline: boolean;
   senderId: string;
