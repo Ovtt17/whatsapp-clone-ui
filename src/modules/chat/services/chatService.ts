@@ -1,11 +1,13 @@
 import axiosInstance from "../../auth/axios/axiosInstance.ts";
 import {ChatResponse} from "../types/ChatResponse.ts";
 
-export const createChat = async (senderId: string, recipientId: string) => {
+export const createChat = async (senderId: string, recipientId: string): Promise<string> => {
   try {
-    const response = await axiosInstance.post("/chat", {
-      senderId,
-      recipientId,
+    const response = await axiosInstance.post("/chats", null, {
+      params: {
+        "sender-id": senderId,
+        "recipient-id": recipientId,
+      },
     });
     return response.data;
   } catch (error) {
