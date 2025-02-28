@@ -13,19 +13,13 @@ const ChatList: FC = () => {
     chats,
     contacts,
     searchNewContact,
-    setSearchNewContact,
-    searchContact,
     chatClicked,
     selectContact
   } = useChatContext();
 
   return (
     <section className='sticky top-0 bg-white w-1/4 h-full shadow-2xl p-1'>
-      <ChatListHeader
-        searchNewContact={searchNewContact}
-        setSearchNewContact={setSearchNewContact}
-        searchContact={searchContact}
-      />
+      <ChatListHeader />
       <ChatListSearch />
       <div className='cursor-pointer hover:bg-[#f2f1f1] mt-3'>
         {chats.length && !searchNewContact ? (
@@ -37,21 +31,21 @@ const ChatList: FC = () => {
                 onClick={chatClicked}
               />
             ))}
-            {
-              searchNewContact && (
-                contacts.map(contact => (
-                  <ContactItem
-                    key={contact.id}
-                    contact={contact}
-                    onClick={selectContact}
-                  />
-                ))
-              )
-            }
+          </>
+        ) : searchNewContact ? (
+          <>
+            {contacts.map(contact => (
+              <ContactItem
+                key={contact.id}
+                contact={contact}
+                onClick={selectContact}
+              />
+            ))}
           </>
         ) : (
           <small className='text-gray-500'>No chats available</small>
         )}
+
       </div>
     </section>
   );
