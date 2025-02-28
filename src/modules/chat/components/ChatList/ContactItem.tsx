@@ -9,7 +9,7 @@ interface ContactItemProps {
 
 const ContactItem: FC<ContactItemProps> = ({ contact, onClick }) => {
   return (
-    <article className='flex justify-between items-center border border-b-gray-300 p-2' onClick={() => onClick(contact)} role="button" tabIndex={0}>
+    <article className='flex justify-between items-center border-b border-b-gray-300 p-2' onClick={() => onClick(contact)} role="button" tabIndex={0}>
       <div className='flex gap-2'>
         <figure className='user-img'>
           <img src="user.png" alt={`${contact.firstName} ${contact.lastName}'s profile picture`} />
