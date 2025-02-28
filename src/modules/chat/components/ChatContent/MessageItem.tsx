@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { MessageResponse, MessageState, MessageType } from '@/modules/message/types/MessageResponse';
 import dayjs from 'dayjs';
 import { IoCheckmarkDoneSharp } from "react-icons/io5";
+import './MessageItem.css';
 
 interface MessageItemProps {
   message: MessageResponse;
@@ -9,8 +10,8 @@ interface MessageItemProps {
 }
 
 const MessageItem: FC<MessageItemProps> = ({ message, isSelf }) => (
-  <div className={`relative flex ${isSelf ? 'justify-end' : 'justify-start'} w-full mx-1 my-0`}>
-    <div className={`relative ${isSelf ? 'right-0 text-right bg-[#d9fdd3]' : 'right-0 text-right bg-gray-100'} max-w-[65%] rounded-sm text-[0.9rem] p-3`}>
+  <div className={`message-box ${isSelf ? 'self' : 'friend'}`}>
+    <div>
       <div className='flex flex-col items-end'>
         {message.type === MessageType.TEXT && (
           <span>{message.content}</span>
