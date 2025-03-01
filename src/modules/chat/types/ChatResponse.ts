@@ -3,8 +3,8 @@ export type ChatResponse = {
   name: string;
   unreadCount?: number;
   lastMessage?: string;
-  lastMessageTime: Date;
+  lastMessageTime: string;
   isRecipientOnline: boolean;
   senderId: string;
-  recipientId: string;
+  receiverId: string;
 }

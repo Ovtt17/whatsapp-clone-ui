@@ -1,12 +1,12 @@
 export interface MessageResponse {
-  id: number;
+  id?: number;
   content: string;
   type: MessageType;
   state: MessageState;
   senderId: string;
   receiverId: string;
-  createdAt: Date;
-  media: Uint8Array;
+  createdAt: string;
+  media?: Uint8Array;
 }
 
 export enum MessageType {

@@ -3,6 +3,6 @@ export interface UserResponse {
   firstName: string;
   lastName: string;
   email: string;
-  lastSeen: Date;
+  lastSeen: string;
   isOnline: boolean;
 }
