@@ -1,9 +1,9 @@
 import { FaCommentMedical, FaTimesCircle } from 'react-icons/fa';
-import { useChatContext } from '../../context/ChatContext';
 import { FC } from 'react';
+import { useContactContext } from '@/modules/user/context/ContactContext';
 
 const ChatListHeader: FC = () => {
-  const { searchNewContact, setSearchNewContact, searchContact } = useChatContext();
+  const { searchNewContact, setSearchNewContact, searchContact } = useContactContext();
 
   const handleIconClick = () => {
     if (searchNewContact) {

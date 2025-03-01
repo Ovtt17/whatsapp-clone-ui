@@ -17,6 +17,7 @@ const ChatContent: FC = () => {
       </section>
     );
   }
+
   return (
     <section className='w-3/4 h-full'>
       <div className='relative flex flex-col justify-between h-full'>

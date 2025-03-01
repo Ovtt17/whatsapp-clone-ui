@@ -2,16 +2,16 @@ import { BrowserRouter } from "react-router-dom";
 import AppRoutes from "./routes/AppRoutes.tsx";
 import { KeycloakProvider } from "./modules/auth/keycloak/KeycloakContext.tsx";
 import { DefaultLayout } from './layout/DefaultLayout';
-import { ChatProvider } from "./modules/chat/context/ChatContext.tsx";
+import CombinedProvider from "./context/CombinedProvider.tsx";
 
 function App() {
   return (
     <BrowserRouter>
       <KeycloakProvider>
         <DefaultLayout>
-          <ChatProvider>
+          <CombinedProvider>
             <AppRoutes />
-          </ChatProvider>
+          </CombinedProvider>
         </DefaultLayout>
       </KeycloakProvider>
     </BrowserRouter>

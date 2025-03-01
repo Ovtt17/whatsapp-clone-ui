@@ -5,17 +5,16 @@ import { locale } from 'dayjs';
 import ChatItem from './ChatItem.tsx';
 import ContactItem from './ContactItem.tsx';
 import { useChatContext } from '../../context/ChatContext.tsx';
+import { useContactContext } from '@/modules/user/context/ContactContext.tsx';
+import { useMessageContext } from '@/modules/message/context/MessageContext.tsx';
 
 locale('es');
 
 const ChatList: FC = () => {
-  const {
-    chats,
-    contacts,
-    searchNewContact,
-    chatClicked,
-    selectContact
-  } = useChatContext();
+  const { chats, initializeChatWithContact } = useChatContext();
+  const { contacts, searchNewContact } = useContactContext();
+  const { handleChatSelection } = useMessageContext();
+
 
   return (
     <section className='sticky top-0 bg-white w-1/4 h-full shadow-2xl p-1'>
@@ -28,7 +27,7 @@ const ChatList: FC = () => {
               <ChatItem
                 key={chat.id}
                 chat={chat}
-                onClick={chatClicked}
+                onClick={handleChatSelection}
               />
             ))}
           </>
@@ -38,7 +37,7 @@ const ChatList: FC = () => {
               <ContactItem
                 key={contact.id}
                 contact={contact}
-                onClick={selectContact}
+                onClick={initializeChatWithContact}
               />
             ))}
           </>

@@ -18,6 +18,7 @@ const ChatItem: FC<ChatItemProps> = ({ chat, onClick }) => {
     }
     return lastMessage?.substring(0, 27) + '...';
   }
+
   return (
     <article className='flex justify-between border-b border-gray-300 p-2' onClick={() => onClick(chat)} role="button" tabIndex={0}>
       <div className='flex gap-2'>

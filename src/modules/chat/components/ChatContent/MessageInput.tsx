@@ -2,13 +2,13 @@ import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
 import { ChangeEvent, FC, KeyboardEvent, useState } from 'react';
 import { FaMicrophone, FaPaperclip, FaPaperPlane } from 'react-icons/fa';
 import { FaFaceSmile } from 'react-icons/fa6';
-import { useChatContext } from '../../context/ChatContext';
+import { useMessageContext } from '@/modules/message/context/MessageContext';
 
 const MessageInput: FC = () => {
   const [showEmojis, setShowEmojis] = useState(false);
   const [message, setMessage] = useState('');
 
-  const { sendMessage } = useChatContext();
+  const { sendMessage } = useMessageContext();
 
   const uploadMedia = (e: ChangeEvent<HTMLInputElement>) => {
 
