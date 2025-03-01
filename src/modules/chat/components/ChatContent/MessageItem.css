@@ -5,6 +5,8 @@
   margin: 5px 0;
 
   &.self {
+    justify-content: flex-end;
+
     > div {
       position: relative;
       right: 0;
@@ -15,8 +17,6 @@
       border-radius: 5px;
       font-size: 0.9em;
     }
-
-    justify-content: flex-end;
 
     &::before {
       content: '';
