@@ -7,7 +7,7 @@ import { useContactContext } from '@/modules/user/context/ContactContext.tsx';
 
 interface ChatContextProps {
   chats: ChatResponse[];
-  setChats: Dispatch<SetStateAction<ChatResponse[]>>;
+  updateOrAddChat: (chatToUpdate: ChatResponse) => void;
   chatSelected: ChatResponse | null;
   setChatSelected: Dispatch<SetStateAction<ChatResponse | null>>;
   initializeChatWithContact: (contact: UserResponse) => void;
@@ -22,14 +22,22 @@ export const ChatProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const { isAuthenticated, keycloakService } = useKeycloak();
   const { setSearchNewContact } = useContactContext();
 
-  useEffect(() => {
-    const fetchChats = async () => {
-      if (!isAuthenticated) return;
-      const allChats = await getChatsByReceiver();
-      setChats(allChats);
-    }
-    fetchChats();
-  }, [isAuthenticated]);
+  const updateOrAddChat = (chatToUpdate: ChatResponse) => {
+    setChats(prevChats => {
+      const existingChatIndex = prevChats.findIndex(chat => chat.id === chatToUpdate.id);
+      if (existingChatIndex !== -1) {
+        const updatedChats = [...prevChats];
+        updatedChats[existingChatIndex] = chatToUpdate;
+        return updatedChats;
+      } else {
+        return [chatToUpdate, ...prevChats];
+      }
+    });
+  };
+
+  const addChatToStart = (newChat: ChatResponse) => {
+    setChats(prevChats => [newChat, ...prevChats]);
+  };
 
   const initializeChatWithContact = async (contact: UserResponse) => {
     const existingChat = chats.find(chat =>
@@ -53,15 +61,25 @@ export const ChatProvider: FC<{ children: ReactNode }> = ({ children }) => {
       isRecipientOnline: contact.isOnline,
       lastMessageTime: contact.lastSeen,
     }
-    setChats(prevChats => [chat, ...prevChats]);
+    addChatToStart(chat);
     setSearchNewContact(false);
     setChatSelected(chat);
   }
 
+
+  useEffect(() => {
+    const fetchChats = async () => {
+      if (!isAuthenticated) return;
+      const allChats = await getChatsByReceiver();
+      setChats(allChats);
+    }
+    fetchChats();
+  }, [isAuthenticated]);
+
   return (
     <ChatContext.Provider value={{
       chats,
-      setChats,
+      updateOrAddChat,
       chatSelected,
       setChatSelected,
       initializeChatWithContact,
