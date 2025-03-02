@@ -1,6 +1,6 @@
 import Keycloak from 'keycloak-js';
 
-class KeycloakService {
+export class KeycloakService {
   private keycloak: Keycloak;
 
   constructor() {
@@ -12,6 +12,7 @@ class KeycloakService {
   }
 
   async init() {
+    if (this.keycloak.authenticated) return true;
     return await this.keycloak.init({onLoad: 'login-required'});
   }
 
@@ -43,5 +44,3 @@ class KeycloakService {
     return this.keycloak.token || null;
   }
 }
-
-export default new KeycloakService();
