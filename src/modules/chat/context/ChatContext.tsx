@@ -53,7 +53,7 @@ export const ChatProvider: FC<{ children: ReactNode }> = ({ children }) => {
       isRecipientOnline: contact.isOnline,
       lastMessageTime: contact.lastSeen,
     }
-    setChats(prevChats => [...prevChats, chat]);
+    setChats(prevChats => [chat, ...prevChats]);
     setSearchNewContact(false);
     setChatSelected(chat);
   }
