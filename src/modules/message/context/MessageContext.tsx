@@ -1,4 +1,4 @@
-import { createContext, FC, ReactNode, useContext, useEffect, useState } from 'react';
+import { createContext, Dispatch, FC, ReactNode, SetStateAction, useContext, useEffect, useState } from 'react';
 import { MessageResponse, MessageState, MessageType } from '@/modules/message/types/MessageResponse.ts';
 import { getMessages, saveMessage, setMessagesToSeen } from '@/modules/message/services/messageService.ts';
 import { useKeycloak } from '@/modules/auth/keycloak/KeycloakContext.tsx';
@@ -8,6 +8,7 @@ import { useChatContext } from '@/modules/chat/context/ChatContext';
 
 interface MessageContextProps {
   chatMessages: MessageResponse[];
+  setChatMessages: Dispatch<SetStateAction<MessageResponse[]>>;
   handleChatSelection: (chat: ChatResponse) => Promise<void>;
   sendMessage: (messageContent: string) => Promise<void>;
   isSelfMessage: (chatMessage: MessageResponse) => boolean;
@@ -16,20 +17,15 @@ interface MessageContextProps {
 const MessageContext = createContext<MessageContextProps | undefined>(undefined);
 
 export const MessageProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const { chatSelected, setChatSelected, setChats } = useChatContext();
+  const { chatSelected, setChatSelected } = useChatContext();
   const [chatMessages, setChatMessages] = useState<MessageResponse[]>([]);
 
   const { keycloakService } = useKeycloak();
 
   const handleChatSelection = async (chat: ChatResponse) => {
-    setChatSelected({
-      ...chat,
-      unreadCount: 0
-    });
     await setMessagesToSeen(chat.id);
-    setChats(prevChats =>
-      prevChats.map(c => c.id === chat.id ? { ...c, unreadCount: 0 } : c)
-    );
+    chat.unreadCount = 0;
+    setChatSelected(chat);
   }
 
   useEffect(() => {
@@ -88,6 +84,7 @@ export const MessageProvider: FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <MessageContext.Provider value={{
       chatMessages,
+      setChatMessages,
       handleChatSelection,
       sendMessage,
       isSelfMessage
