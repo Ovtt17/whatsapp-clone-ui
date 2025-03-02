@@ -6,7 +6,7 @@ export interface MessageResponse {
   senderId: string;
   receiverId: string;
   createdAt: string;
-  media?: Uint8Array;
+  media?: Array<string>;
 }
 
 export enum MessageType {
