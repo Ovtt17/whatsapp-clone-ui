@@ -7,6 +7,7 @@ import { useContactContext } from '@/modules/user/context/ContactContext.tsx';
 
 interface ChatContextProps {
   chats: ChatResponse[];
+  setChats: Dispatch<SetStateAction<ChatResponse[]>>;
   chatSelected: ChatResponse | null;
   setChatSelected: Dispatch<SetStateAction<ChatResponse | null>>;
   initializeChatWithContact: (contact: UserResponse) => void;
@@ -60,6 +61,7 @@ export const ChatProvider: FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <ChatContext.Provider value={{
       chats,
+      setChats,
       chatSelected,
       setChatSelected,
       initializeChatWithContact,

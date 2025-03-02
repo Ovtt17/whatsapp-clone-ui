@@ -16,20 +16,20 @@ interface MessageContextProps {
 const MessageContext = createContext<MessageContextProps | undefined>(undefined);
 
 export const MessageProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const { chatSelected, setChatSelected } = useChatContext();
+  const { chatSelected, setChatSelected, setChats } = useChatContext();
   const [chatMessages, setChatMessages] = useState<MessageResponse[]>([]);
 
   const { keycloakService } = useKeycloak();
 
   const handleChatSelection = async (chat: ChatResponse) => {
-    setChatSelected(prevChat => ({
-      ...prevChat,
+    setChatSelected({
       ...chat,
       unreadCount: 0
-    }));
-    const messages = await getMessages(chat.id);
-    setChatMessages(messages);
+    });
     await setMessagesToSeen(chat.id);
+    setChats(prevChats =>
+      prevChats.map(c => c.id === chat.id ? { ...c, unreadCount: 0 } : c)
+    );
   }
 
   useEffect(() => {
