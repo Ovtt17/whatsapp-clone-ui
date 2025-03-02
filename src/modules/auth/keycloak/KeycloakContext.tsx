@@ -1,4 +1,4 @@
-import {createContext, ReactNode, useContext, useEffect, useMemo, useState} from 'react';
+import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
 import { setupAxiosInterceptors } from '../axios/axiosInstance.ts';
 import { KeycloakService } from './KeycloakService.ts';
 
@@ -25,14 +25,14 @@ export const KeycloakProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <KeycloakContext.Provider value={{ keycloakService, isAuthenticated }}>
-  {children}
-  </KeycloakContext.Provider>
-);
+      {children}
+    </KeycloakContext.Provider>
+  );
 };
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const useKeycloak = () => {
-  const context  = useContext(KeycloakContext);
+  const context = useContext(KeycloakContext);
   if (!context) {
     throw new Error('useKeycloak must be used within a KeycloakProvider');
   }
