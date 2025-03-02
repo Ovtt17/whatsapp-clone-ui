@@ -2,13 +2,15 @@ import { FC } from 'react';
 import { ChatResponse } from "../../types/ChatResponse.ts";
 import { FaImage } from 'react-icons/fa';
 import dayjs from 'dayjs';
+import { useMessageContext } from '@/modules/message/context/MessageContext.tsx';
 
 interface ChatItemProps {
   chat: ChatResponse;
-  onClick: (chat: ChatResponse) => void;
 }
 
-const ChatItem: FC<ChatItemProps> = ({ chat, onClick }) => {
+const ChatItem: FC<ChatItemProps> = ({ chat }) => {
+  const { handleChatSelection } = useMessageContext();
+
   const wrapMessage = (lastMessage: string | undefined) => {
     if (!lastMessage) {
       return 'No messages';
@@ -20,7 +22,7 @@ const ChatItem: FC<ChatItemProps> = ({ chat, onClick }) => {
   }
 
   return (
-    <article className='flex justify-between border-b border-gray-300 p-2' onClick={() => onClick(chat)} role="button" tabIndex={0}>
+    <article className='flex justify-between border-b border-gray-300 p-2' onClick={() => handleChatSelection(chat)} role="button" tabIndex={0}>
       <div className='flex gap-2'>
         <figure className='user-img'>
           <img src="user.png" alt={`${chat.name}'s profile picture`} />
@@ -34,7 +36,7 @@ const ChatItem: FC<ChatItemProps> = ({ chat, onClick }) => {
         </div>
       </div>
       <div className='flex flex-col items-end'>
-        <time className={`text-md ${chat.unreadCount && chat.unreadCount > 0 ? 'text-[#1fa855] font-medium' : 'text-gray-500'}`} dateTime={dayjs(chat.lastMessageTime).format()}>
+        <time className={`text-md ${(chat.unreadCount ?? 0) > 0 ? 'text-[#1fa855] font-medium' : 'text-gray-500'}`} dateTime={dayjs(chat.lastMessageTime).format()}>
           {dayjs(chat.lastMessageTime).format('DD/MM/YY')}
         </time>
         {(chat.unreadCount ?? 0) > 0 && (
