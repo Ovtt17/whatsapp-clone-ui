@@ -1,19 +1,24 @@
 import Keycloak from 'keycloak-js';
 
 export class KeycloakService {
-  private keycloak: Keycloak;
+  private _keycloak: Keycloak | undefined;
 
-  constructor() {
-    this.keycloak = new Keycloak({
-      realm: import.meta.env.VITE_KEYCLOAK_REALM,
-      url: import.meta.env.VITE_KEYCLOAK_URL,
-      clientId: import.meta.env.VITE_KEYCLOAK_CLIENT_ID
-    });
+  constructor() { }
+
+  get keycloak() {
+    if (!this._keycloak) {
+      this._keycloak = new Keycloak({
+        realm: import.meta.env.VITE_KEYCLOAK_REALM,
+        url: import.meta.env.VITE_KEYCLOAK_URL,
+        clientId: import.meta.env.VITE_KEYCLOAK_CLIENT_ID
+      });
+    }
+    return this._keycloak;
   }
 
   async init() {
     if (this.keycloak.authenticated) return true;
-    return await this.keycloak.init({onLoad: 'login-required'});
+    return await this.keycloak.init({ onLoad: 'login-required' });
   }
 
   async login() {
