@@ -7,14 +7,14 @@ const MessageList = () => {
   const lastMessageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
+    lastMessageRef.current?.scrollIntoView();
   }, [chatMessages]);
 
   return (
     <article className='h-full bg-chat p-3 no-scrollbar overflow-y-auto'>
       {chatMessages.length ? (
         chatMessages.map((message, index) => (
-          <div key={message.id} ref={index === chatMessages.length - 1 ? lastMessageRef : null}>
+          <div key={index} ref={index === chatMessages.length - 1 ? lastMessageRef : null}>
             <MessageItem message={message} isSelf={isSelfMessage(message)} />
           </div>
         ))
