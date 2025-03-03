@@ -9,7 +9,7 @@ interface ChatItemProps {
 }
 
 const ChatItem: FC<ChatItemProps> = ({ chat }) => {
-  const { handleChatSelection } = useMessageContext();
+  const { chatClicked } = useMessageContext();
 
   const wrapMessage = (lastMessage: string | undefined) => {
     if (!lastMessage) {
@@ -22,7 +22,7 @@ const ChatItem: FC<ChatItemProps> = ({ chat }) => {
   }
 
   return (
-    <article className='flex justify-between border-b border-gray-300 p-2' onClick={() => handleChatSelection(chat)} role="button" tabIndex={0}>
+    <article className='flex justify-between border-b border-gray-300 p-2' onClick={() => chatClicked(chat)} role="button" tabIndex={0}>
       <div className='flex gap-2'>
         <figure className='user-img'>
           <img src="user.png" alt={`${chat.name}'s profile picture`} />
