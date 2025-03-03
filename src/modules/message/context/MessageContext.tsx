@@ -1,5 +1,5 @@
 import { createContext, Dispatch, FC, ReactNode, SetStateAction, useContext, useEffect, useState } from 'react';
-import { MessageResponse, MessageState, MessageType } from '@/modules/message/types/MessageResponse.ts';
+import { MessageResponse, MessageType } from '@/modules/message/types/MessageResponse.ts';
 import { getMessages, saveMessage, setMessagesToSeen } from '@/modules/message/services/messageService.ts';
 import { useKeycloak } from '@/modules/auth/keycloak/KeycloakContext.tsx';
 import { MessageRequest } from '@/modules/message/types/MessageRequest.ts';
@@ -50,17 +50,17 @@ export const MessageProvider: FC<{ children: ReactNode }> = ({ children }) => {
       const response = await saveMessage(messageRequest);
 
       if (response.status === 201) {
-        const messageResponse: MessageResponse = {
-          senderId: messageRequest.senderId,
-          receiverId: messageRequest.receiverId,
-          content: messageRequest.content,
-          type: messageRequest.type,
-          state: MessageState.SENT,
-          createdAt: new Date().toString(),
-        };
+        // const messageResponse: MessageResponse = {
+        //   senderId: messageRequest.senderId,
+        //   receiverId: messageRequest.receiverId,
+        //   content: messageRequest.content,
+        //   type: messageRequest.type,
+        //   state: MessageState.SENT,
+        //   createdAt: new Date().toString(),
+        // };
 
         setChatSelected(prevChat => prevChat ? { ...prevChat, lastMessage: messageContent } : prevChat);
-        setChatMessages(prevMessages => [...prevMessages, messageResponse]);
+        // setChatMessages(prevMessages => [...prevMessages, messageResponse]);
       }
     }
   }

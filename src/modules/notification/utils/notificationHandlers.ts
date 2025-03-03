@@ -42,6 +42,7 @@ export const handleNotificationForSelectedChat = (
 export const handleNotificationForOtherChats = (
   notification: Notification,
   chats: ChatResponse[],
+  chatSelected: ChatResponse | null,
   updateOrAddChat: (chatToUpdate: ChatResponse) => void
 ) => {
   if (!chats.length) return;
@@ -49,7 +50,7 @@ export const handleNotificationForOtherChats = (
   if (targetChat && notification.type !== NotificationType.SEEN) {
     targetChat.lastMessage = notification.type === NotificationType.IMAGE ? 'Attachment' : notification.content;
     targetChat.lastMessageTime = new Date().toISOString();
-    targetChat.unreadCount! += 1;
+    targetChat.unreadCount = chatSelected && chatSelected.id === notification.chatId ? 0 : (targetChat.unreadCount || 0) + 1;
     updateOrAddChat(targetChat);
   } else if (notification.type === NotificationType.MESSAGE) {
     const newChat: ChatResponse = {

@@ -27,7 +27,7 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
     if (chatSelected && chatSelected.id === notification.chatId) {
       handleNotificationForSelectedChat(notification, chatSelected, setChatSelected, setChatMessages);
     } else {
-      handleNotificationForOtherChats(notification, chats, updateOrAddChat);
+      handleNotificationForOtherChats(notification, chats, chatSelected, updateOrAddChat);
     }
   };
 
