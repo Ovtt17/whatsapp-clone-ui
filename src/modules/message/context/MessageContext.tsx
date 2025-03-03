@@ -1,5 +1,5 @@
-import { createContext, FC, ReactNode, useContext, useEffect, useState } from 'react';
-import { MessageResponse, MessageState, MessageType } from '@/modules/message/types/MessageResponse.ts';
+import { createContext, Dispatch, FC, ReactNode, SetStateAction, useContext, useEffect, useState } from 'react';
+import { MessageResponse, MessageType } from '@/modules/message/types/MessageResponse.ts';
 import { getMessages, saveMessage, setMessagesToSeen } from '@/modules/message/services/messageService.ts';
 import { useKeycloak } from '@/modules/auth/keycloak/KeycloakContext.tsx';
 import { MessageRequest } from '@/modules/message/types/MessageRequest.ts';
@@ -8,7 +8,8 @@ import { useChatContext } from '@/modules/chat/context/ChatContext';
 
 interface MessageContextProps {
   chatMessages: MessageResponse[];
-  handleChatSelection: (chat: ChatResponse) => Promise<void>;
+  setChatMessages: Dispatch<SetStateAction<MessageResponse[]>>;
+  chatClicked: (chat: ChatResponse) => void;
   sendMessage: (messageContent: string) => Promise<void>;
   isSelfMessage: (chatMessage: MessageResponse) => boolean;
 }
@@ -21,14 +22,9 @@ export const MessageProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   const { keycloakService } = useKeycloak();
 
-  const handleChatSelection = async (chat: ChatResponse) => {
-    setChatSelected(prevChat => ({
-      ...prevChat,
-      ...chat,
-      unreadCount: 0
-    }));
-    const messages = await getMessages(chat.id);
-    setChatMessages(messages);
+  const chatClicked = async (chat: ChatResponse) => {
+    chat.unreadCount = 0;
+    setChatSelected(chat);
     await setMessagesToSeen(chat.id);
   }
 
@@ -54,17 +50,17 @@ export const MessageProvider: FC<{ children: ReactNode }> = ({ children }) => {
       const response = await saveMessage(messageRequest);
 
       if (response.status === 201) {
-        const messageResponse: MessageResponse = {
-          senderId: messageRequest.senderId,
-          receiverId: messageRequest.receiverId,
-          content: messageRequest.content,
-          type: messageRequest.type,
-          state: MessageState.SENT,
-          createdAt: new Date().toString(),
-        };
+        // const messageResponse: MessageResponse = {
+        //   senderId: messageRequest.senderId,
+        //   receiverId: messageRequest.receiverId,
+        //   content: messageRequest.content,
+        //   type: messageRequest.type,
+        //   state: MessageState.SENT,
+        //   createdAt: new Date().toString(),
+        // };
 
         setChatSelected(prevChat => prevChat ? { ...prevChat, lastMessage: messageContent } : prevChat);
-        setChatMessages(prevMessages => [...prevMessages, messageResponse]);
+        // setChatMessages(prevMessages => [...prevMessages, messageResponse]);
       }
     }
   }
@@ -88,7 +84,8 @@ export const MessageProvider: FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <MessageContext.Provider value={{
       chatMessages,
-      handleChatSelection,
+      setChatMessages,
+      chatClicked,
       sendMessage,
       isSelfMessage
     }}>

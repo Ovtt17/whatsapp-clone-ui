@@ -3,12 +3,14 @@ import { ChangeEvent, FC, KeyboardEvent, useState } from 'react';
 import { FaMicrophone, FaPaperclip, FaPaperPlane } from 'react-icons/fa';
 import { FaFaceSmile } from 'react-icons/fa6';
 import { useMessageContext } from '@/modules/message/context/MessageContext';
+import { useChatContext } from '../../context/ChatContext';
 
 const MessageInput: FC = () => {
   const [showEmojis, setShowEmojis] = useState(false);
   const [message, setMessage] = useState('');
 
-  const { sendMessage } = useMessageContext();
+  const { chatSelected } = useChatContext();
+  const { sendMessage, chatClicked } = useMessageContext();
 
   const uploadMedia = (e: ChangeEvent<HTMLInputElement>) => {
 
@@ -33,6 +35,11 @@ const MessageInput: FC = () => {
     await sendMessage(message);
     setMessage('');
     setShowEmojis(false);
+  }
+
+  const handleInputClick = async () => {
+    setShowEmojis(false);
+    chatSelected && chatClicked(chatSelected);
   }
 
   return (
@@ -61,7 +68,7 @@ const MessageInput: FC = () => {
           value={message}
           onChange={e => setMessage(e.target.value)}
           onKeyDown={handleKeyDown}
-          onClick={() => setShowEmojis(false)}
+          onClick={handleInputClick}
         />
         {message ? (
           <FaPaperPlane className='h-4 w-4 cursor-pointer' onClick={hadleSendMessage} />
