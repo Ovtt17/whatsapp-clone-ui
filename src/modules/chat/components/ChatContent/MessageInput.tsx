@@ -10,10 +10,11 @@ const MessageInput: FC = () => {
   const [message, setMessage] = useState('');
 
   const { chatSelected } = useChatContext();
-  const { sendMessage, chatClicked } = useMessageContext();
+  const { sendMessage, chatClicked, uploadMedia: uploadMediaMessage } = useMessageContext();
 
   const uploadMedia = (e: ChangeEvent<HTMLInputElement>) => {
-
+    const target = e.target;
+    uploadMediaMessage(target);
   }
 
   const changeShowEmojiStatus = () => {
