@@ -58,7 +58,7 @@ export const ChatProvider: FC<{ children: ReactNode }> = ({ children }) => {
       name: `${contact.firstName} ${contact.lastName}`,
       senderId: keycloakService.userId as string,
       receiverId: contact.id,
-      isRecipientOnline: contact.isOnline,
+      recipientOnline: contact.online,
       lastMessageTime: contact.lastSeen,
     }
     addChatToStart(chat);

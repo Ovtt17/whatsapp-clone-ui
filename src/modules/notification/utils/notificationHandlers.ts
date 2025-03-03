@@ -60,7 +60,7 @@ export const handleNotificationForOtherChats = (
       lastMessage: notification.content,
       lastMessageTime: new Date().toISOString(),
       unreadCount: 1,
-      isRecipientOnline: true,
+      recipientOnline: true,
     };
     updateOrAddChat(newChat);
   }

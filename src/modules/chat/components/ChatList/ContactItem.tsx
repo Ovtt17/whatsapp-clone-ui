@@ -18,7 +18,7 @@ const ContactItem: FC<ContactItemProps> = ({ contact }) => {
         </figure>
         <div className='flex flex-col'>
           <h2 className='text-lg font-semibold'>{contact.firstName} {contact.lastName}</h2>
-          {contact.isOnline
+          {contact.online
             ? (<p className='text-gray-400'>Online</p>)
             : (<time className='text-gray-400' dateTime={dayjs(contact.lastSeen).format()}>{dayjs(contact.lastSeen).format('DD:MM:YY HH:mm')}</time>)
           }
