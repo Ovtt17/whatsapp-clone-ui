@@ -9,7 +9,7 @@ import { useChatContext } from '@/modules/chat/context/ChatContext';
 interface MessageContextProps {
   chatMessages: MessageResponse[];
   setChatMessages: Dispatch<SetStateAction<MessageResponse[]>>;
-  handleChatSelection: (chat: ChatResponse) => Promise<void>;
+  chatClicked: (chat: ChatResponse) => void;
   sendMessage: (messageContent: string) => Promise<void>;
   isSelfMessage: (chatMessage: MessageResponse) => boolean;
 }
@@ -22,10 +22,10 @@ export const MessageProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   const { keycloakService } = useKeycloak();
 
-  const handleChatSelection = async (chat: ChatResponse) => {
-    await setMessagesToSeen(chat.id);
+  const chatClicked = async (chat: ChatResponse) => {
     chat.unreadCount = 0;
     setChatSelected(chat);
+    await setMessagesToSeen(chat.id);
   }
 
   useEffect(() => {
@@ -85,7 +85,7 @@ export const MessageProvider: FC<{ children: ReactNode }> = ({ children }) => {
     <MessageContext.Provider value={{
       chatMessages,
       setChatMessages,
-      handleChatSelection,
+      chatClicked,
       sendMessage,
       isSelfMessage
     }}>
