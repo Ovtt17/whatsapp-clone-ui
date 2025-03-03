@@ -65,7 +65,7 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
         setSubscription(null);
       }
     };
-  }, [keycloakService.keycloak.tokenParsed?.sub, chats.length]);
+  }, [keycloakService.keycloak.tokenParsed?.sub, chats.length, chatSelected]);
 
   return (
     <NotificationContext.Provider value={{ socketClient }}>
