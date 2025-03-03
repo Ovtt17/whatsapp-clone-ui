@@ -20,7 +20,6 @@ export const handleNotificationForSelectedChat = (
         content: notification.content,
         type: notification.messageType,
         media: notification.media,
-        state: MessageState.SENT,
         createdAt: new Date().toISOString(),
       };
 
@@ -50,7 +49,7 @@ export const handleNotificationForOtherChats = (
   if (targetChat && notification.type !== NotificationType.SEEN) {
     targetChat.lastMessage = notification.type === NotificationType.IMAGE ? 'Attachment' : notification.content;
     targetChat.lastMessageTime = new Date().toISOString();
-    targetChat.unreadCount = (targetChat.unreadCount || 0) + 1;
+    targetChat.unreadCount! += 1;
     updateOrAddChat(targetChat);
   } else if (notification.type === NotificationType.MESSAGE) {
     const newChat: ChatResponse = {
