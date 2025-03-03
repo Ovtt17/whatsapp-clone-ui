@@ -1,5 +1,5 @@
 import axios from 'axios';
-import KeycloakService from "../keycloak/KeycloakService.ts";
+import { KeycloakService } from '../keycloak/KeycloakService';
 
 const BASE_API_URL = `${import.meta.env.VITE_API_URL}`;
 
@@ -11,7 +11,7 @@ const axiosInstance = axios.create({
   },
 });
 
-export const setupAxiosInterceptors = (keycloakService: typeof KeycloakService) => {
+export const setupAxiosInterceptors = (keycloakService: KeycloakService) => {
   axiosInstance.interceptors.request.use(
     async (config) => {
       const token = keycloakService.token;
@@ -32,7 +32,7 @@ export const setupAxiosInterceptors = (keycloakService: typeof KeycloakService) 
       if (error.response?.status === 401 && !originalRequest._retry) {
         originalRequest._retry = true;
         try {
-          await keycloakService.init();
+          await keycloakService.login();
           const token = keycloakService.token;
           if (token) {
             originalRequest.headers.Authorization = `Bearer ${token}`;

@@ -4,5 +4,5 @@ export interface UserResponse {
   lastName: string;
   email: string;
   lastSeen: string;
-  isOnline: boolean;
+  online: boolean;
 }
