@@ -1,6 +1,6 @@
 import { createContext, Dispatch, FC, ReactNode, SetStateAction, useContext, useEffect, useState } from 'react';
-import { MessageResponse, MessageType } from '@/modules/message/types/MessageResponse.ts';
-import { getMessages, saveMessage, setMessagesToSeen } from '@/modules/message/services/messageService.ts';
+import { MessageResponse, MessageState, MessageType } from '@/modules/message/types/MessageResponse.ts';
+import { getMessages, saveMessage, setMessagesToSeen, uploadMediaMessage } from '@/modules/message/services/messageService.ts';
 import { useKeycloak } from '@/modules/auth/keycloak/KeycloakContext.tsx';
 import { MessageRequest } from '@/modules/message/types/MessageRequest.ts';
 import { ChatResponse } from '@/modules/chat/types/ChatResponse';
@@ -12,6 +12,7 @@ interface MessageContextProps {
   chatClicked: (chat: ChatResponse) => void;
   sendMessage: (messageContent: string) => Promise<void>;
   isSelfMessage: (chatMessage: MessageResponse) => boolean;
+  uploadMedia: (target: EventTarget | null) => void;
 }
 
 const MessageContext = createContext<MessageContextProps | undefined>(undefined);
@@ -65,6 +66,37 @@ export const MessageProvider: FC<{ children: ReactNode }> = ({ children }) => {
     }
   }
 
+  const uploadMedia = (target: EventTarget | null) => {
+    const file = extractFileFromTarget(target);
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = async () => {
+        if (reader.result) {
+          const mediaLines = reader.result.toString().split(',')[1];
+          await uploadMediaMessage(chatSelected?.id as string, file);
+
+          const message: MessageResponse = {
+            senderId: getSenderId(),
+            receiverId: getReceiverId(),
+            content: 'Attachment',
+            type: MessageType.IMAGE,
+            state: MessageState.SENT,
+            media: [mediaLines],
+            createdAt: new Date().toString(),
+          };
+          setChatMessages(prevMessages => [...prevMessages, message]);
+        }
+      }
+      reader.readAsDataURL(file);
+    }
+  }
+
+  const extractFileFromTarget = (target: EventTarget | null) => {
+    const htmlInputTarget = target as HTMLInputElement;
+    if (target === null || htmlInputTarget.files === null) return null;
+    return htmlInputTarget.files[0];
+  }
+
   const isSelfMessage = (chatMessage: MessageResponse) => {
     return chatMessage.senderId === keycloakService.userId as string;
   }
@@ -87,7 +119,8 @@ export const MessageProvider: FC<{ children: ReactNode }> = ({ children }) => {
       setChatMessages,
       chatClicked,
       sendMessage,
-      isSelfMessage
+      isSelfMessage,
+      uploadMedia
     }}>
       {children}
     </MessageContext.Provider>

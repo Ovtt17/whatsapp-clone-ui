@@ -33,3 +33,22 @@ export const saveMessage = async (message: MessageRequest): Promise<Response> =>
     throw error;
   }
 }
+
+export const uploadMediaMessage = async (chatId: string, file: File): Promise<void> => {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  try {
+    await axiosInstance.post(`/messages/upload-media`, formData, {
+      params: {
+        'chat-id': chatId
+      },
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+  } catch (error) {
+    console.error("Error uploading media message:", error);
+    throw error;
+  }
+}
