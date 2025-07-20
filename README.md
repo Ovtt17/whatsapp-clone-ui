@@ -97,6 +97,8 @@ _Send and receive messages in real time with a clean and modern interface._
 
 ### Demo
 
+https://github.com/user-attachments/assets/091f3eab-9880-4bf1-ade2-a40ae521c680
+
 _See how the application works in real time._
 
 ---
