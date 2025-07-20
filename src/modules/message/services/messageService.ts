@@ -12,9 +12,9 @@ export const getMessages = async (chatId: string): Promise<MessageResponse[]> =>
   }
 }
 
-export const setMessagesToSeen = async (chatId: string): Promise<void> => {
+export const setMessagesToSeen = async (chatId: string): Promise<Response> => {
   try {
-    await axiosInstance.patch(`/messages`, null, {
+    return await axiosInstance.patch(`/messages`, null, {
       params: {
         "chat-id": chatId,
       }

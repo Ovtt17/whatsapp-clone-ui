@@ -1,5 +1,5 @@
 import axiosInstance from "../../auth/axios/axiosInstance.ts";
-import {ChatResponse} from "../types/ChatResponse.ts";
+import { ChatResponse } from "../types/ChatResponse.ts";
 
 export const createChat = async (senderId: string, recipientId: string): Promise<string> => {
   try {
@@ -9,7 +9,9 @@ export const createChat = async (senderId: string, recipientId: string): Promise
         "recipient-id": recipientId,
       },
     });
-    return response.data;
+
+    const chatId = response.data.response;
+    return chatId;
   } catch (error) {
     console.error("Error creating chat:", error);
     throw error;

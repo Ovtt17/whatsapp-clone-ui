@@ -1,4 +1,4 @@
-import { createContext, Dispatch, FC, ReactNode, SetStateAction, useContext, useEffect, useState } from 'react';
+import { createContext, Dispatch, FC, ReactNode, SetStateAction, useContext, useState } from 'react';
 import { MessageResponse, MessageState, MessageType } from '@/modules/message/types/MessageResponse.ts';
 import { getMessages, saveMessage, setMessagesToSeen, uploadMediaMessage } from '@/modules/message/services/messageService.ts';
 import { useKeycloak } from '@/modules/auth/keycloak/KeycloakContext.tsx';
@@ -18,7 +18,7 @@ interface MessageContextProps {
 const MessageContext = createContext<MessageContextProps | undefined>(undefined);
 
 export const MessageProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const { chatSelected, setChatSelected } = useChatContext();
+  const { chatSelected, setChatSelected, updateOrAddChat } = useChatContext();
   const [chatMessages, setChatMessages] = useState<MessageResponse[]>([]);
 
   const { keycloakService } = useKeycloak();
@@ -26,18 +26,18 @@ export const MessageProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const chatClicked = async (chat: ChatResponse) => {
     chat.unreadCount = 0;
     setChatSelected(chat);
-    await setMessagesToSeen(chat.id);
-  }
 
-  useEffect(() => {
-    const fetchMessages = async () => {
-      if (chatSelected) {
-        const messages = await getMessages(chatSelected.id as string);
-        setChatMessages(messages);
-      }
+    const messages = await getMessages(chat.id);
+    setChatMessages(messages);
+
+    const hasUnreadFromOtherUser = messages.some(
+      m => m.state === MessageState.SENT && m.senderId !== keycloakService.userId
+    );
+
+    if (hasUnreadFromOtherUser) {
+      await setMessagesToSeen(chat.id);
     }
-    fetchMessages();
-  }, [chatSelected]);
+  };
 
   const sendMessage = async (messageContent: string) => {
     if (messageContent) {
@@ -51,17 +51,25 @@ export const MessageProvider: FC<{ children: ReactNode }> = ({ children }) => {
       const response = await saveMessage(messageRequest);
 
       if (response.status === 201) {
-        // const messageResponse: MessageResponse = {
-        //   senderId: messageRequest.senderId,
-        //   receiverId: messageRequest.receiverId,
-        //   content: messageRequest.content,
-        //   type: messageRequest.type,
-        //   state: MessageState.SENT,
-        //   createdAt: new Date().toString(),
-        // };
+        const messageResponse: MessageResponse = {
+          senderId: messageRequest.senderId,
+          receiverId: messageRequest.receiverId,
+          content: messageRequest.content,
+          type: messageRequest.type,
+          createdAt: new Date().toISOString(),
+        };
 
-        setChatSelected(prevChat => prevChat ? { ...prevChat, lastMessage: messageContent } : prevChat);
-        // setChatMessages(prevMessages => [...prevMessages, messageResponse]);
+        if (chatSelected) {
+          setChatMessages(prevMessages => [...prevMessages, messageResponse]);
+          const updatedChat = {
+            ...chatSelected,
+            lastMessage: messageContent,
+            lastMessageTime: new Date().toISOString(),
+          };
+
+          updateOrAddChat(updatedChat);
+        }
+
       }
     }
   }

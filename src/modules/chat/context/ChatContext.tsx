@@ -75,12 +75,6 @@ export const ChatProvider: FC<{ children: ReactNode }> = ({ children }) => {
     }
     fetchChats();
   }, [isAuthenticated]);
-
-  useEffect(() => {
-    if (chatSelected) {
-      updateOrAddChat(chatSelected);
-    }
-  }, [chatSelected]);
   
 
   return (
